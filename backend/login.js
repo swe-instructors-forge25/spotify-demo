@@ -7,7 +7,7 @@ const querystring = require("querystring");
 
 const clientId = process.env.SPOTIFY_CLIENT_ID;
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-const redirectURI = "http://localhost:3000/callback";
+const redirectURI = "https://test-spotify-site.local:3000/login/callback";
 
 const generateRandomString = (length) => {
   let text = ``;
@@ -23,6 +23,7 @@ const generateRandomString = (length) => {
 const stateKey = `spotify_auth_state`;
 
 router.get(`/`, (request, response) => {
+  console.log(redirectURI);
   const state = generateRandomString(16);
   response.cookie(stateKey, state);
 
