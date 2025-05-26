@@ -17,6 +17,9 @@ function App() {
       setRefreshToken(refresh);
       setExpiresIn(expires);
     }
+
+    // Optionally, remove the parameters from the URL
+    window.history.replaceState({}, document.title, window.location.pathname);
   }, []);
 
   function handleSignOut() {
