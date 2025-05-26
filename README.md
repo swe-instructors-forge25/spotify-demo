@@ -1,5 +1,7 @@
 ## Setting Up Your Computer to Test Spotify Locally
 
+This repository was made to serve as an example of how you can get a server to run locally but use https and "not" be on localhost. It was made due to the new restructions on Spotify's API which state that the redirect URI provided to the API must use HTTPs, except in the case that you are using a loopback address, and cannot use localhost.
+
 ### Mac Instructions
 
 1. Go to your Backend Folder and install mkcert, enter your password where prompted
