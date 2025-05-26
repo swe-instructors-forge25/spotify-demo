@@ -44,44 +44,6 @@ router.get(`/`, (request, response) => {
   response.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-// Helper function to make HTTPS POST requests
-const makeHttpsRequest = (options, postData) => {
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      let data = "";
-
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
-
-      res.on("end", () => {
-        try {
-          const parsedData = JSON.parse(data);
-          resolve({
-            status: res.statusCode,
-            data: parsedData,
-          });
-        } catch (error) {
-          resolve({
-            status: res.statusCode,
-            data: data,
-          });
-        }
-      });
-    });
-
-    req.on("error", (error) => {
-      reject(error);
-    });
-
-    if (postData) {
-      req.write(postData);
-    }
-
-    req.end();
-  });
-};
-
 router.get(`/callback`, async (req, res) => {
   const code = req.query.code || null;
 
@@ -104,54 +66,44 @@ router.get(`/callback`, async (req, res) => {
     },
   };
 
-  try {
-    const response = await makeHttpsRequest(options, postData);
+  const request = https.request(options, (response) => {
+    let data = "";
 
-    if (response.status === 200) {
-      const { access_token, refresh_token, expires_in } = response.data;
+    response.on("data", (chunk) => {
+      data += chunk;
+    });
 
-      const queryParams = querystring.stringify({
-        access_token,
-        refresh_token,
-        expires_in,
-      });
+    response.on("end", () => {
+      try {
+        const parsedData = JSON.parse(data);
 
-      res.redirect(`http://localhost:5173/?${queryParams}`);
-    } else {
-      res.redirect(`/?${querystring.stringify({ error: `invalid_token` })}`);
-    }
-  } catch (error) {
-    res.send(error);
-  }
-});
+        if (response.statusCode === 200) {
+          const { access_token, refresh_token, expires_in } = parsedData;
 
-router.get(`/refresh_token`, async (req, res) => {
-  const { refresh_token } = req.query;
+          const queryParams = querystring.stringify({
+            access_token,
+            refresh_token,
+            expires_in,
+          });
 
-  const postData = querystring.stringify({
-    grant_type: `refresh_token`,
-    refresh_token: refresh_token,
+          res.redirect(`http://localhost:5173/?${queryParams}`);
+        } else {
+          res.redirect(
+            `/?${querystring.stringify({ error: `invalid_token` })}`
+          );
+        }
+      } catch (error) {
+        res.redirect(`/?${querystring.stringify({ error: `parse_error` })}`);
+      }
+    });
   });
 
-  const options = {
-    hostname: "accounts.spotify.com",
-    path: "/api/token",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": Buffer.byteLength(postData),
-      Authorization: `Basic ${Buffer.from(
-        `${clientId}:${clientSecret}`
-      ).toString("base64")}`,
-    },
-  };
+  request.on("error", (error) => {
+    res.redirect(`/?${querystring.stringify({ error: `request_error` })}`);
+  });
 
-  try {
-    const response = await makeHttpsRequest(options, postData);
-    res.send(response.data);
-  } catch (error) {
-    res.send(error);
-  }
+  request.write(postData);
+  request.end();
 });
 
 module.exports = router;
