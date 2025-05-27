@@ -11,6 +11,9 @@ brew install mkcert
 ```
 
 2. Open `/etc/hosts` and add this line: `127.0.0.1 myspotifyapp.local` in the Local section
+```bash
+sudo nano /etc/hosts
+```
 
 3. Create a new certificate by runnning the following in your terminal
 
