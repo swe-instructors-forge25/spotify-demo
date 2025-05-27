@@ -50,6 +50,8 @@ https.createServer(options, app).listen(port, () => {
 choco install mkcert
 ```
 
+- If you do not have choco you can find the install guide here: https://chocolatey.org/install
+
 2. Open `C:\Windows\System32\drivers\etc\hosts` and add this line: `127.0.0.1 test-spotify-site.local` in the Local section
 - You can open files with CMD+Shift+P in VSCode and then type File:Open File...
 - Add the line `127.0.0.1 test-spotify-site.local` at the bottom of the hosts file under "# ::1 localhost"
