@@ -10,7 +10,7 @@ This repository was made to serve as an example of how you can get a server to r
 brew install mkcert
 ```
 
-2. Open `/etc/hosts` and add this line: `127.0.0.1 myspotifyapp.local` in the Local section
+2. Open `/etc/hosts` and add this line: `127.0.0.1 test-spotify-site.local` in the Local section
 
 ```bash
 sudo nano /etc/hosts
