@@ -11,6 +11,7 @@ brew install mkcert
 ```
 
 2. Open `/etc/hosts` and add this line: `127.0.0.1 myspotifyapp.local` in the Local section
+
 ```bash
 sudo nano /etc/hosts
 ```
@@ -19,7 +20,7 @@ sudo nano /etc/hosts
 
 ```bash
 mkcert -install
-mkcert myspotifyapp.local
+mkcert test-spotify-site.local
 ```
 
 4. Update your server to run like this :
@@ -49,13 +50,13 @@ https.createServer(options, app).listen(port, () => {
 choco install mkcert
 ```
 
-2. Open `C:\Windows\System32\drivers\etc\hosts` and add this line: `127.0.0.1 myspotifyapp.local` in the Local section
+2. Open `C:\Windows\System32\drivers\etc\hosts` and add this line: `127.0.0.1 test-spotify-site.local` in the Local section
 
 3. Create a new certificate by runnning the following in your terminal
 
 ```bash
 mkcert -install
-mkcert myspotifyapp.local
+mkcert test-spotify-site.local
 ```
 
 4. Update your server to run like this :
